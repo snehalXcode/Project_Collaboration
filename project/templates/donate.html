@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Donate{% endblock %}
+
+{% block content %}
+  <h1>Support Our Animal Rescue Work</h1>
+  <p class="muted">
+    Donations help cover medical care, food, shelter maintenance, and outreach activities.
+    This starter app stores donation records but does not integrate with a real payment gateway.
+  </p>
+
+  <section class="section">
+    <form id="donation-form" class="form-grid">
+      <div class="form-field">
+        <label for="donor_name">Name</label>
+        <input id="donor_name" type="text" required />
+      </div>
+      <div class="form-field">
+        <label for="donor_email">Email</label>
+        <input id="donor_email" type="email" />
+      </div>
+      <div class="form-field">
+        <label for="donation_amount">Amount (₹)</label>
+        <input id="donation_amount" type="number" min="1" step="0.01" required />
+      </div>
+      <div class="form-field full-width">
+        <label for="donation_message">Message (optional)</label>
+        <textarea id="donation_message" rows="3"></textarea>
+      </div>
+      <div class="form-actions full-width">
+        <button class="btn primary" type="submit">Record Donation</button>
+        <span id="donation-status" class="muted"></span>
+      </div>
+    </form>
+  </section>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script>
+    window.NGO_PLATFORM_CONFIG = {
+      apiBase: "{{ request.url_root.rstrip('/') }}"
+    };
+  </script>
+{% endblock %}
+

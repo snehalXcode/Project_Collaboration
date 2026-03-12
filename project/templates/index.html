@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Animal Rescue{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Integrated NGO Platform for Animal Rescue</h1>
+      <p>
+        Centralize rescued animal records, identify animals with AI, enable
+        virtual adoptions, and make donations simpler.
+      </p>
+      <div class="hero-actions">
+        <a class="btn primary" href="{{ url_for('dashboard') }}">NGO Dashboard</a>
+        <a class="btn secondary" href="{{ url_for('adoption_list') }}">See Animals for Adoption</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Animals Available for Adoption</h2>
+    {% if animals %}
+      <div class="card-grid">
+        {% for animal in animals %}
+          <article class="card">
+            <div class="card-image">
+              {% if animal.image_filename %}
+                <img
+                  src="{{ url_for('static', filename='placeholder-animal.jpg') }}"
+                  alt="{{ animal.species or 'Rescued animal' }}"
+                />
+              {% else %}
+                <div class="image-placeholder">No Image</div>
+              {% endif %}
+            </div>
+            <div class="card-body">
+              <h3>{{ animal.species or 'Unknown Species' }}</h3>
+              <p class="muted">
+                Breed: {{ animal.breed or 'Unknown' }}<br />
+                Shelter: {{ animal.shelter_location or 'Unknown' }}
+              </p>
+              <a class="btn small" href="{{ url_for('animal_profile', animal_id=animal.id) }}">
+                View Profile
+              </a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="muted">No animals are currently listed for adoption.</p>
+    {% endif %}
+  </section>
+{% endblock %}
+

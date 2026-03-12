@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+    <h2>Create Group - {{ subject.name }}</h2>
+    <p class="subtitle">You will be the Team Leader for this group.</p>
+
+    <form method="post" class="group-form">
+        <label>Team Size (including you as leader)</label>
+        <input type="number" name="team_size" min="1" required placeholder="Enter maximum team size">
+
+        <div class="student-lists">
+            <div class="student-list">
+                <h3>Available Students</h3>
+                {% if available_students %}
+                    <p class="small-note">Select members from the available list. They are not in any group for this subject.</p>
+                    <div class="student-checkboxes">
+                        {% for s in available_students %}
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="members" value="{{ s.id }}">
+                                <span>{{ s.name }} ({{ s.roll_number }})</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No available students at the moment.</p>
+                {% endif %}
+            </div>
+
+            <div class="student-list">
+                <h3>Unavailable Students</h3>
+                {% if unavailable_students %}
+                    <p class="small-note">These students are already in a group for this subject.</p>
+                    <ul>
+                        {% for s in unavailable_students %}
+                            <li>{{ s.name }} ({{ s.roll_number }})</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Everyone is currently available.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <button type="submit" class="btn-primary">Create Group</button>
+        <a href="{{ url_for('dashboard') }}" class="btn-link">Back to Dashboard</a>
+    </form>
+</section>
+{% endblock %}
+

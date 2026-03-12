@@ -1,0 +1,6 @@
+animal_id,species,breed,rescue_date,shelter_location,health_status,adoption_status
+AN-1001,Dog,Labrador Retriever,2025-12-01,Green Paws Shelter,Healthy,available
+AN-1002,Cat,Persian,2025-12-05,Happy Tails Shelter,Under treatment,available
+AN-1003,Dog,Indian Pariah,2025-12-10,City Rescue Center,Recovered,adopted
+AN-1004,Rabbit,Unknown,2025-12-12,Green Paws Shelter,Healthy,available
+

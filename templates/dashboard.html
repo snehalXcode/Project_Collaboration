@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+    <h2>Welcome, {{ user.name }}!</h2>
+    <p class="subtitle">Choose a subject to create or view your project group.</p>
+
+    <div class="card-grid">
+        {% for item in subject_status %}
+            <div class="card">
+                <h3>{{ item.subject.name }}</h3>
+                {% if item.group %}
+                    <p>You are already in a group for this subject.</p>
+                    <a href="{{ url_for('group_detail', group_id=item.group.id) }}" class="btn-secondary">Open Group</a>
+                {% else %}
+                    <p>No group created yet.</p>
+                    <a href="{{ url_for('create_group', subject_id=item.subject.id) }}" class="btn-primary">Create Group</a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+

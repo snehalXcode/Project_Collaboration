@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Virtual Adoption{% endblock %}
+
+{% block content %}
+  <h1>Animals Available for Virtual Adoption</h1>
+
+  {% if animals %}
+    <div class="card-grid">
+      {% for animal in animals %}
+        <article class="card">
+          <div class="card-image">
+            {% if animal.image_filename %}
+              <img
+                src="{{ url_for('static', filename='placeholder-animal.jpg') }}"
+                alt="{{ animal.species or 'Rescued animal' }}"
+              />
+            {% else %}
+              <div class="image-placeholder">No Image</div>
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <h3>{{ animal.species or 'Unknown Species' }}</h3>
+            <p class="muted">
+              Breed: {{ animal.breed or 'Unknown' }}<br />
+              Shelter: {{ animal.shelter_location or 'Unknown' }}
+            </p>
+            <a class="btn small" href="{{ url_for('animal_profile', animal_id=animal.id) }}">
+              View Profile
+            </a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="muted">No animals currently available for adoption.</p>
+  {% endif %}
+
+  <section class="section">
+    <h2>Submit Adoption Request</h2>
+    <p class="muted">
+      Fill out this form with the ID of the animal you are interested in.
+    </p>
+    <form id="adoption-form" class="form-grid">
+      <div class="form-field">
+        <label for="adopt_animal_id">Animal ID (numeric)</label>
+        <input id="adopt_animal_id" type="number" min="1" required />
+      </div>
+      <div class="form-field">
+        <label for="adopt_name">Your Name</label>
+        <input id="adopt_name" type="text" required />
+      </div>
+      <div class="form-field">
+        <label for="adopt_email">Email</label>
+        <input id="adopt_email" type="email" required />
+      </div>
+      <div class="form-field">
+        <label for="adopt_phone">Phone</label>
+        <input id="adopt_phone" type="text" />
+      </div>
+      <div class="form-field full-width">
+        <label for="adopt_address">Address</label>
+        <textarea id="adopt_address" rows="2"></textarea>
+      </div>
+      <div class="form-field full-width">
+        <label for="adopt_message">Message</label>
+        <textarea id="adopt_message" rows="3"></textarea>
+      </div>
+      <div class="form-actions full-width">
+        <button class="btn primary" type="submit">Send Request</button>
+        <span id="adopt-status" class="muted"></span>
+      </div>
+    </form>
+  </section>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script>
+    window.NGO_PLATFORM_CONFIG = {
+      apiBase: "{{ request.url_root.rstrip('/') }}"
+    };
+  </script>
+{% endblock %}
+

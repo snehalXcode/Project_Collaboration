@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="group-header">
+    <div>
+        <h2>{{ group.subject.name }} - Group</h2>
+        <p class="subtitle">
+            Team Leader:
+            {% for m in group.members %}
+                {% if m.is_leader %}
+                    {{ m.user.name }} ({{ m.user.roll_number }})
+                {% endif %}
+            {% endfor %}
+        </p>
+    </div>
+    <div class="progress-bar-wrapper">
+        <span>Task Progress: {{ progress_percent }}%</span>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: {{ progress_percent }}%;"></div>
+        </div>
+        <span class="small-note">{{ completed_tasks }} of {{ total_tasks }} tasks completed</span>
+    </div>
+</section>
+
+<section class="group-layout">
+    <div class="group-column">
+        <div class="panel">
+            <h3>Members</h3>
+            <ul>
+                {% for m in group.members %}
+                    <li>
+                        {{ m.user.name }} ({{ m.user.roll_number }})
+                        {% if m.is_leader %}
+                            <span class="badge">Leader</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="panel">
+            <h3>Tasks</h3>
+
+            <form method="post" class="task-form">
+                <input type="hidden" name="action" value="add_task">
+                <label>New Task Title</label>
+                <input type="text" name="title" required placeholder="e.g., Literature survey">
+                <label>Description (optional)</label>
+                <textarea name="description" rows="2" placeholder="Short description of the task"></textarea>
+                <button type="submit" class="btn-primary">Add Task</button>
+            </form>
+
+            {% if group.tasks %}
+                <ul class="task-list">
+                    {% for task in group.tasks %}
+                        <li class="{% if task.is_completed %}task-completed{% endif %}">
+                            <form method="post" class="task-item">
+                                <input type="hidden" name="action" value="toggle_task">
+                                <input type="hidden" name="task_id" value="{{ task.id }}">
+                                <button type="submit" class="task-toggle-btn">
+                                    {% if task.is_completed %}✔{% else %}○{% endif %}
+                                </button>
+                                <div class="task-content">
+                                    <span class="task-title">{{ task.title }}</span>
+                                    {% if task.description %}
+                                        <span class="task-desc">{{ task.description }}</span>
+                                    {% endif %}
+                                </div>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No tasks added yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="group-column">
+        <div class="panel chat-panel">
+            <h3>Group Chat</h3>
+            <div class="chat-window">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="chat-message {% if message.user_id == user.id %}chat-own{% endif %}">
+                            <div class="chat-meta">
+                                <span class="chat-author">
+                                    {{ message.user.name }}
+                                </span>
+                                <span class="chat-time">
+                                    {{ message.created_at.strftime('%d %b %H:%M') }}
+                                </span>
+                            </div>
+                            <div class="chat-content">
+                                {{ message.content }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="small-note">No messages yet. Start the conversation!</p>
+                {% endif %}
+            </div>
+
+            <form method="post" class="chat-form">
+                <input type="hidden" name="action" value="send_message">
+                <textarea name="content" rows="2" required placeholder="Type your message..."></textarea>
+                <button type="submit" class="btn-primary">Send</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<div class="back-link">
+    <a href="{{ url_for('dashboard') }}" class="btn-link">← Back to Dashboard</a>
+</div>
+{% endblock %}
+

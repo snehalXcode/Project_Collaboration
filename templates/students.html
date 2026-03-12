@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+    <div class="page-header">
+        <h2>Enrolled Students</h2>
+        <p class="subtitle">All students who have registered in this system.</p>
+    </div>
+
+    {% if students %}
+        <div class="student-table-wrapper">
+            <table class="student-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Roll Number</th>
+                    <th>Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for s in students %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>
+                            <span class="avatar-circle">
+                                {{ s.name[0]|upper }}
+                            </span>
+                            <span class="student-name">{{ s.name }}</span>
+                        </td>
+                        <td>{{ s.roll_number }}</td>
+                        <td>{{ s.email }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No students have registered yet.</p>
+    {% endif %}
+</section>
+{% endblock %}
+

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-container">
+    <h2>Student Login</h2>
+    <form method="post" class="auth-form">
+        <label>Email</label>
+        <input type="email" name="email" required placeholder="student@example.com">
+
+        <label>Password</label>
+        <input type="password" name="password" required placeholder="Enter your password">
+
+        <button type="submit" class="btn-primary">Login</button>
+        <p class="auth-switch">
+            Don't have an account?
+            <a href="{{ url_for('register') }}">Sign up</a>
+        </p>
+    </form>
+</div>
+{% endblock %}
+

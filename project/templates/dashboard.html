@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}NGO Dashboard{% endblock %}
+
+{% block content %}
+  <h1>NGO Dashboard</h1>
+
+  <section class="section">
+    <h2>Add New Rescued Animal</h2>
+    <form id="add-animal-form" class="form-grid">
+      <div class="form-field">
+        <label for="species">Species</label>
+        <input id="species" name="species" type="text" placeholder="Dog, Cat, etc." />
+      </div>
+      <div class="form-field">
+        <label for="breed">Breed</label>
+        <input id="breed" name="breed" type="text" placeholder="Optional" />
+      </div>
+      <div class="form-field">
+        <label for="rescue_date">Rescue Date</label>
+        <input id="rescue_date" name="rescue_date" type="date" />
+      </div>
+      <div class="form-field">
+        <label for="shelter_location">Shelter Location</label>
+        <input
+          id="shelter_location"
+          name="shelter_location"
+          type="text"
+          placeholder="Shelter name or address"
+        />
+      </div>
+      <div class="form-field full-width">
+        <label for="health_status">Health Status</label>
+        <input
+          id="health_status"
+          name="health_status"
+          type="text"
+          placeholder="Healthy, Under treatment, etc."
+        />
+      </div>
+      <div class="form-actions full-width">
+        <button class="btn primary" type="submit">Add Animal</button>
+        <span id="add-animal-status" class="muted"></span>
+      </div>
+    </form>
+  </section>
+
+  <section class="section">
+    <h2>Upload & Recognize Animal Image</h2>
+    <form id="upload-form" class="form-grid" enctype="multipart/form-data">
+      <div class="form-field full-width">
+        <label for="image">Animal Image</label>
+        <input id="image" name="image" type="file" accept="image/*" />
+      </div>
+      <div class="form-actions full-width">
+        <button class="btn primary" type="submit">Upload & Recognize</button>
+        <span id="upload-status" class="muted"></span>
+      </div>
+    </form>
+  </section>
+
+  <section class="section">
+    <h2>Animal Records</h2>
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="search_species">Species</label>
+        <input id="search_species" type="text" placeholder="Dog, Cat..." />
+      </div>
+      <div class="form-field">
+        <label for="search_breed">Breed</label>
+        <input id="search_breed" type="text" placeholder="Labrador, etc." />
+      </div>
+      <div class="form-field">
+        <label for="search_shelter">Shelter Location</label>
+        <input id="search_shelter" type="text" placeholder="Shelter name" />
+      </div>
+      <div class="form-actions">
+        <button class="btn secondary" id="search-btn" type="button">Search</button>
+      </div>
+    </div>
+
+    <div id="animals-table-wrapper" class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Species</th>
+            <th>Breed</th>
+            <th>Shelter</th>
+            <th>Health</th>
+            <th>Adoption Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="animals-table-body">
+          {% for animal in animals %}
+            <tr>
+              <td>{{ animal.animal_id }}</td>
+              <td>{{ animal.species or 'Unknown' }}</td>
+              <td>{{ animal.breed or 'Unknown' }}</td>
+              <td>{{ animal.shelter_location or 'Unknown' }}</td>
+              <td>{{ animal.health_status or 'Unknown' }}</td>
+              <td>{{ animal.adoption_status }}</td>
+              <td>
+                <a class="btn small" href="{{ url_for('animal_profile', animal_id=animal.id) }}">
+                  View
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script>
+    window.NGO_PLATFORM_CONFIG = {
+      apiBase: "{{ request.url_root.rstrip('/') }}"
+    };
+  </script>
+{% endblock %}
+
